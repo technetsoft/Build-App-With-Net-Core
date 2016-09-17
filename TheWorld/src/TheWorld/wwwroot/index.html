@@ -9,7 +9,7 @@
 <body>
     <div id="sidebar">
         <img src="img/images.png" alt="Headshot" class="headshot" />
-        <span>
+        <span id="username">
             Riyant Kurniawan
         </span>
         <ul class="menu">
@@ -19,29 +19,36 @@
         </ul>
     </div>
 
-    <div id="wrapper">
-        <div id="main">
-            <h3>The World</h3>
-            <p>This will be a fun website soon!</p>
-
-            <form>
-                <div>
-                    <label>Date</label>
-                    <input type="text" />
-                </div>
-                <div>
-                    <label>Location</label>
-                    <input type="text" />
-                </div>
-                <div>
-                    <input type="button" value="Add" />
-                </div>
-            </form>
+<div id="wrapper">
+    <div id="main">
+        <div>
+            <button id="sidebarToggle">Toggle Menu</button>
         </div>
+        <h3>The World</h3>
+        <p>This will be a fun website soon!</p>
 
-        <div id="footer">
-            &copy; 2015 The World Ltd.
-        </div>
+        <form>
+            <div>
+                <label>Date</label>
+                <input type="text"/>
+            </div>
+            <div>
+                <label>Location</label>
+                <input type="text"/>
+            </div>
+            <div>
+                <input type="button" value="Add"/>
+            </div>
+        </form>
     </div>
+
+    <div id="footer">
+        &copy; 2015 The World Ltd.
+    </div>
+</div>
+
+<script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="js/site.js"></script>
+
 </body>
 </html>
