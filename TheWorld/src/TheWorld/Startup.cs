@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using TheWorld.Models;
 using TheWorld.Services;
+using TheWorld.ViewModels;
 
 namespace TheWorld
 {
@@ -65,6 +67,11 @@ namespace TheWorld
             ILoggerFactory factory)
         {
             //app.UseDefaultFiles();
+
+            Mapper.Initialize(config => 
+                config.CreateMap<TripViewModel, Trip>().ReverseMap()
+            );
+
 //#if DEBUG
             if (env.IsEnvironment("Development"))
             {
