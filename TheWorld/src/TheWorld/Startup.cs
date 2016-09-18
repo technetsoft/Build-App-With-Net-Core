@@ -68,9 +68,11 @@ namespace TheWorld
         {
             //app.UseDefaultFiles();
 
-            Mapper.Initialize(config => 
-                config.CreateMap<TripViewModel, Trip>().ReverseMap()
-            );
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<TripViewModel, Trip>().ReverseMap();
+                config.CreateMap<StopViewModel, Stop>().ReverseMap();
+            });
 
 //#if DEBUG
             if (env.IsEnvironment("Development"))
