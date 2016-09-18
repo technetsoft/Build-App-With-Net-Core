@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TheWorld.Models;
 using TheWorld.Services;
 
 namespace TheWorld
@@ -42,12 +43,16 @@ namespace TheWorld
             {
                 //Implement a real Mail Service
             }
+
+            services.AddDbContext<WorldContext>();
+
+            services.AddTransient<WorldContextSeedData>();
             
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, WorldContextSeedData seeder)
         {
             //app.UseDefaultFiles();
 //#if DEBUG
@@ -65,6 +70,8 @@ namespace TheWorld
                     defaults: new {controller = "App", action = "Index"}
                     );
             });
+
+            seeder.EnsureSeedData().Wait();
 
             //app.Run(async (context) =>
             //{
