@@ -26,20 +26,29 @@ namespace TheWorld.Controllers.Api
         }
 
         [HttpGet("")]
-        public IActionResult Get()
+        public JsonResult Get()
         {
-            try
-            {
-                var results = _repository.GetAllTrips();
+            var trips = _repository.GetUserTripsWithStops(User.Identity.Name);
+            var results = Mapper.Map<IEnumerable<TripViewModel>>(trips);
 
-                return Ok(Mapper.Map<IEnumerable<TripViewModel>>(results));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed to get All Trips: {ex.Message}");
-                return BadRequest("Error occurred");
-            }
+            return Json(results);
         }
+
+        //[HttpGet("")]
+        //public IActionResult Get()
+        //{
+        //    try
+        //    {
+        //        var results = _repository.GetAllTrips();
+
+        //        return Ok(Mapper.Map<IEnumerable<TripViewModel>>(results));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Failed to get All Trips: {ex.Message}");
+        //        return BadRequest("Error occurred");
+        //    }
+        //}
 
         [HttpPost("")]
         public async Task<IActionResult> Post([FromBody]TripViewModel theTrip)
@@ -47,6 +56,8 @@ namespace TheWorld.Controllers.Api
             if (ModelState.IsValid)
             {
                 var newTrip = Mapper.Map<Trip>(theTrip);
+                newTrip.UserName = User.Identity.Name;
+
                 _repository.AddTrip(newTrip);
 
                 if (await _repository.SaveChangesAsync())
