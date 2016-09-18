@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -63,6 +62,23 @@ namespace TheWorld
                 config.User.RequireUniqueEmail = true;
                 config.Password.RequiredLength = 8;
                 config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+                config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
+                {
+                    OnRedirectToLogin = async ctx =>
+                    {
+                        if (ctx.Request.Path.StartsWithSegments("/api") && 
+                            ctx.Response.StatusCode == (int)Enum.Parse(typeof(HttpStatusCode), Enum.GetName(typeof(HttpStatusCode), HttpStatusCode.OK)))
+                        {
+                            int unauthorized = (int)Enum.Parse(typeof(HttpStatusCode), Enum.GetName(typeof(HttpStatusCode), HttpStatusCode.Unauthorized));
+                            ctx.Response.StatusCode = unauthorized;
+                        }
+                        else
+                        {
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
+                        await Task.Yield();
+                    }
+                };
             }).AddEntityFrameworkStores<WorldContext>();
 
             services.AddLogging();
