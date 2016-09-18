@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
 using TheWorld.Models;
 using TheWorld.Services;
 
@@ -52,8 +53,10 @@ namespace TheWorld
             services.AddTransient<WorldContextSeedData>();
 
             services.AddLogging();
-            
-            services.AddMvc();
+
+            services.AddMvc()
+                .AddJsonOptions(
+                    config => config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
