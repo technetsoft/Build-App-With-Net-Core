@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -31,6 +32,12 @@ namespace TheWorld.Controllers.Web
 
         public IActionResult Index()
         {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Trips()
+        {
             try
             {
                 var data = _repository.GetAllTrips();
@@ -41,7 +48,6 @@ namespace TheWorld.Controllers.Web
                 _logger.LogError($"Failed to get trips in Index page: {ex.Message}");
                 return Redirect("/error");
             }
-            
         }
 
         [HttpGet]

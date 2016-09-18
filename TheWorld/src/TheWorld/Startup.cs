@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -56,6 +57,13 @@ namespace TheWorld
 
             services.AddTransient<WorldContextSeedData>();
 
+            services.AddIdentity<WorldUser, IdentityRole>(config =>
+            {
+                config.User.RequireUniqueEmail = true;
+                config.Password.RequiredLength = 8;
+                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+            }).AddEntityFrameworkStores<WorldContext>();
+
             services.AddLogging();
 
             services.AddMvc()
@@ -70,12 +78,6 @@ namespace TheWorld
         {
             //app.UseDefaultFiles();
 
-            Mapper.Initialize(config =>
-            {
-                config.CreateMap<TripViewModel, Trip>().ReverseMap();
-                config.CreateMap<StopViewModel, Stop>().ReverseMap();
-            });
-
 //#if DEBUG
             if (env.IsEnvironment("Development"))
             {
@@ -87,7 +89,17 @@ namespace TheWorld
                 factory.AddDebug(LogLevel.Error);
             }
 //#endif
+
             app.UseStaticFiles();
+
+            app.UseIdentity();
+
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<TripViewModel, Trip>().ReverseMap();
+                config.CreateMap<StopViewModel, Stop>().ReverseMap();
+            });
+            
             app.UseMvc(config =>
             {
                 config.MapRoute(
