@@ -34,14 +34,19 @@
         viewModel.newTrip = {};
 
         viewModel.addTrip = function() {
-            //alert(viewModel.newTrip.name);
-            viewModel.trips.push(
-            {
-                name: viewModel.newTrip.name,
-                created: new Date()
-            });
+            viewModel.isBusy = true;
+            viewModel.errorMessage = "";
 
-            viewModel.newTrip = {};
+            $http.post("/api/trips", viewModel.newTrip).then(function (response) {
+                //Success
+                viewModel.trips.push(response.data);
+                viewModel.newTrip = {};
+            }, function (error) {
+                //Failure
+                viewModel.errorMessage = "Failed to save new trip: " + error;
+            }).finally(function () {
+                viewModel.isBusy = false;
+            });
         };
     }
 
