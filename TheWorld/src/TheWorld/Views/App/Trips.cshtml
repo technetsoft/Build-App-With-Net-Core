@@ -5,6 +5,7 @@
 
 @section scripts{
     <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/js/simpleControls.js"></script>
     <script src="~/js/app-trips.js"></script>
     <script src="~/js/tripsController.js"></script>
 }
@@ -15,9 +16,12 @@
         @*{{ vm.name }}*@
         
         <div class="text-danger" ng-show="viewModel.errorMessage">{{ viewModel.errorMessage }}</div>
-        <div ng-show="viewModel.isBusy" class="text-center">
+        <wait-cursor display-when="viewModel.isBusy"></wait-cursor>
+
+        @*<wait-cursor ng-show="viewModel.isBusy"></wait-cursor>*@
+        @*<div ng-show="viewModel.isBusy" class="text-center">
             <i class="fa fa-spinner fa-spin"></i> Loading...
-        </div>
+        </div>*@
 
         <table class="table table-responsive table-striped">
             <tr ng-repeat="trip in viewModel.trips">

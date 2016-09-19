@@ -2,5 +2,5 @@
     "use strict";
 
     //Creating Module
-    angular.module("app-trips", []);
+    angular.module("app-trips", ["simpleControls"]);
 })();
